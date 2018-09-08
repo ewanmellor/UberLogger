@@ -122,11 +122,6 @@ public class UberLoggerAppWindow : MonoBehaviour, UberLogger.ILogger
         }
     }
 
-    public void ToggleWindow()
-    {
-        ShowWindow = !ShowWindow;
-    }
-
     /// <summary>
     /// Draws the main window
     /// </summary>
