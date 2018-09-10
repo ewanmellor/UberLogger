@@ -1,0 +1,12 @@
+{
+    "name": "UberLoggerEditor",
+    "references": [
+        "UberLogger"
+    ],
+    "optionalUnityReferences": [],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false
+}

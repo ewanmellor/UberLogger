@@ -1,0 +1,10 @@
+{
+    "name": "UberLoggerExamples",
+    "references": [
+        "UberLogger"
+    ],
+    "optionalUnityReferences": [],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false
+}
