@@ -56,6 +56,7 @@ public class UberLoggerAppWindow : MonoBehaviour, UberLogger.ILogger
         ClearSelectedMessage();
         WindowRect = new Rect(0,0, Screen.width/2, Screen.height);
         CurrentTopPaneHeight = Screen.height*SizerStartHeightRatio;
+        CliComponent = GetComponent<UberLoggerCLI>();
     }
 
     public bool ShowWindow { get; set; }
@@ -135,6 +136,10 @@ public class UberLoggerAppWindow : MonoBehaviour, UberLogger.ILogger
         DrawFilter();
         DrawChannels();
         DrawLogList();
+        if (CliComponent != null && CliComponent.enabled)
+        {
+            CliComponent.DrawCLI();
+        }
         GUILayout.EndVertical();
         ResizeTopPane();
 
@@ -149,22 +154,22 @@ public class UberLoggerAppWindow : MonoBehaviour, UberLogger.ILogger
     }
 
     //Some helper functions to draw buttons that are only as big as their text
-    bool ButtonClamped(string text, GUIStyle style)
+    internal static bool ButtonClamped(string text, GUIStyle style)
     {
         return GUILayout.Button(text, style, GUILayout.MaxWidth(style.CalcSize(new GUIContent(text)).x));
     }
 
-    bool ToggleClamped(bool state, string text, GUIStyle style)
+    internal static bool ToggleClamped(bool state, string text, GUIStyle style)
     {
         return GUILayout.Toggle(state, text, style, GUILayout.MaxWidth(style.CalcSize(new GUIContent(text)).x));
     }
 
-    bool ToggleClamped(bool state, GUIContent content, GUIStyle style, params GUILayoutOption[] par)
+    internal static bool ToggleClamped(bool state, GUIContent content, GUIStyle style, params GUILayoutOption[] par)
     {
         return GUILayout.Toggle(state, content, style, GUILayout.MaxWidth(style.CalcSize(content).x));
     }
 
-    void LabelClamped(string text, GUIStyle style)
+    internal static void LabelClamped(string text, GUIStyle style)
     {
         GUILayout.Label(text, style, GUILayout.MaxWidth(style.CalcSize(new GUIContent(text)).x));
     }
@@ -490,4 +495,6 @@ public class UberLoggerAppWindow : MonoBehaviour, UberLogger.ILogger
     bool ShowWarnings = true; 
     bool ShowMessages = true; 
     int SelectedCallstackFrame = 0;
+
+    UberLoggerCLI CliComponent;
 }
