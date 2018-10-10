@@ -1,13 +1,17 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public sealed class UberLoggerCLI : MonoBehaviour {
 
+    public const string TextFieldName = "UberLoggerCLI_TextField";
     const string CallbackMethodName = "UberLoggerCLI_HandleCommand";
 
     readonly Dictionary<string, Component> handlers = new Dictionary<string, Component>();
     string commandText = "";
+
+    bool focusNextRedraw;
+
 
     public void RegisterHandler(Component c, string cmdName = null)
     {
@@ -26,6 +30,13 @@ public sealed class UberLoggerCLI : MonoBehaviour {
         return cmdName ?? c.name ?? c.GetType().Name;
     }
 
+
+    public void FocusNextRedraw()
+    {
+        focusNextRedraw = true;
+    }
+
+
     internal void DrawCLI()
     {
         if (!enabled)
@@ -35,18 +46,34 @@ public sealed class UberLoggerCLI : MonoBehaviour {
 
         GUILayout.BeginHorizontal();
         UberLoggerAppWindow.LabelClamped("Command line", GUI.skin.label);
-        if (Event.current.type == EventType.KeyDown &&
-            Event.current.keyCode == KeyCode.Return)
+
+        var ev = Event.current;
+        if ((ev.type == EventType.KeyDown || ev.type == EventType.KeyUp) &&
+            ev.keyCode == KeyCode.Return)
         {
-            ExecuteCommand(commandText);
+            ExecuteCommand();
             commandText = "";
+            ev.Use();
         }
-        commandText = GUILayout.TextArea(commandText);
+        GUI.SetNextControlName(TextFieldName);
+        commandText = GUILayout.TextField(commandText);
         GUILayout.EndHorizontal();
+
+        if (focusNextRedraw)
+        {
+            focusNextRedraw = false;
+            GUI.FocusControl(TextFieldName);
+        }
     }
 
-    void ExecuteCommand(string cmd)
+
+    void ExecuteCommand()
     {
+        var cmd = commandText.Trim();
+        if (cmd == "")
+        {
+            return;
+        }
         var bits = cmd.Split(' ');
         var handlerName = bits[0];
         Component handler;
@@ -56,7 +83,7 @@ public sealed class UberLoggerCLI : MonoBehaviour {
         }
         else
         {
-            Debug.LogFormat("No such command: {0}", handlerName);
+            Debug.LogFormat("No such command handler: {0}", handlerName);
         }
     }
 }
