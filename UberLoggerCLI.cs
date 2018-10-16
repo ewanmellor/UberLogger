@@ -107,4 +107,10 @@ public sealed class UberLoggerCLI : MonoBehaviour {
     {
         Debug.LogFormat("Known commands: {0}", string.Join(", ", commands));
     }
+
+
+    public static void LogSubcommandUsage(string prefix, IEnumerable<string> commands)
+    {
+        Debug.LogFormat("Known subcommands of {0}: {1}", prefix, string.Join(", ", commands));
+    }
 }
