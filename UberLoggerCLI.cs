@@ -99,6 +99,12 @@ public sealed class UberLoggerCLI : MonoBehaviour {
     void UberLoggerCLI_HandleCommand()
     {
         var handlerNames = handlers.Keys.OrderBy(x => x);
-        Debug.LogFormat("Known commands: {0}", string.Join(", ", handlerNames));
+        LogCommandUsage(handlerNames);
+    }
+
+
+    public static void LogCommandUsage(IEnumerable<string> commands)
+    {
+        Debug.LogFormat("Known commands: {0}", string.Join(", ", commands));
     }
 }
