@@ -1,6 +1,8 @@
-using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+
 using UnityEngine;
+
 
 public sealed class UberLoggerCLI : MonoBehaviour {
 
@@ -11,6 +13,12 @@ public sealed class UberLoggerCLI : MonoBehaviour {
     string commandText = "";
 
     bool focusNextRedraw;
+
+
+    void Start()
+    {
+        RegisterHandler(this, "help");
+    }
 
 
     public void RegisterHandler(Component c, string cmdName = null)
@@ -85,5 +93,12 @@ public sealed class UberLoggerCLI : MonoBehaviour {
         {
             Debug.LogFormat("No such command handler: {0}", handlerName);
         }
+    }
+
+
+    void UberLoggerCLI_HandleCommand()
+    {
+        var handlerNames = handlers.Keys.OrderBy(x => x);
+        Debug.LogFormat("Known commands: {0}", string.Join(", ", handlerNames));
     }
 }
