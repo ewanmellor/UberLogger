@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 
 using UnityEngine;
 
@@ -87,7 +88,9 @@ public sealed class UberLoggerCLI : MonoBehaviour {
         Component handler;
         if (handlers.TryGetValue(handlerName, out handler) && handler != null)
         {
-            handler.SendMessage(CallbackMethodName, bits);
+            var t = handler.GetType();
+            var mi = t.GetMethod(CallbackMethodName, BindingFlags.NonPublic | BindingFlags.Instance);
+            mi.Invoke(handler, new object[] { bits });
         }
         else
         {
